@@ -8,7 +8,6 @@ export default function Parallax() {
   const bgRef = useRef(null);
   const { lang } = useLanguage();
   const t = translations.parallax[lang];
-  console.log('🚀 ~ Parallax ~ t:', t);
 
   useEffect(() => {
     const handleScroll = () => {

@@ -13,9 +13,11 @@ import ArticleDetailPage from './pages/ArticleDetailPage';
 import RegisterPage from './pages/RegisterPage';
 import RegistrationSuccessPage from './pages/RegistrationSuccessPage';
 import ETicketPage from './pages/ETicketPage';
+import StaffPortal from './pages/StaffPortal';
 
 function AppContent() {
   const location = useLocation();
+  const isStaffRoute = location.pathname.startsWith('/staff');
 
   useEffect(() => {
     // Global scroll reveal observer
@@ -40,7 +42,7 @@ function AppContent() {
 
   return (
     <>
-      <Navbar />
+      {!isStaffRoute && <Navbar />}
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/tentang-kami' element={<AboutPage />} />
@@ -53,8 +55,9 @@ function AppContent() {
         <Route path='/e-ticket/:ticketToken' element={<ETicketPage />} />
         <Route path='/artikel' element={<ArticlesPage />} />
         <Route path='/artikel/:slug' element={<ArticleDetailPage />} />
+        <Route path='/staff/*' element={<StaffPortal />} />
       </Routes>
-      <Footer />
+      {!isStaffRoute && <Footer />}
     </>
   );
 }
