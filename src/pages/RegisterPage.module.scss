@@ -1,0 +1,501 @@
+.page {
+  min-height: 100vh;
+  background: $off-white;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 9.5rem 0 4.5rem;
+  background:
+    radial-gradient(circle at 84% 8%, rgba($green, 0.13), transparent 28rem),
+    radial-gradient(circle at 8% 90%, rgba($blue, 0.08), transparent 22rem), $white;
+  border-bottom: 1px solid $mid-gray;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: -4rem;
+    bottom: -6rem;
+    width: 18rem;
+    height: 18rem;
+    border: 2.5rem solid rgba($yellow, 0.09);
+    border-radius: 50%;
+  }
+
+  &__title {
+    position: relative;
+    z-index: 1;
+    max-width: 840px;
+    margin: 0.85rem 0 1rem;
+    color: $text-dark;
+    font-family: $font-display;
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+  }
+
+  &__subtitle {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    color: $text-body;
+    font-size: clamp(1rem, 2vw, 1.16rem);
+  }
+}
+
+.contentSection {
+  padding: 3rem 0 6rem;
+}
+
+.layout {
+  display: grid;
+  gap: 1.5rem;
+
+  @media (min-width: $bp-lg) {
+    grid-template-columns: minmax(255px, 0.34fr) minmax(0, 0.66fr);
+    align-items: start;
+    gap: 2rem;
+  }
+}
+
+.sidebar {
+  display: grid;
+  gap: 1.25rem;
+
+  @media (min-width: $bp-lg) {
+    position: sticky;
+    top: 7rem;
+  }
+}
+
+.eventCard,
+.noteCard,
+.formCard {
+  border: 1px solid $mid-gray;
+  border-radius: $radius-lg;
+  background: $white;
+  box-shadow: $shadow-sm;
+}
+
+.eventCard {
+  padding: 1.5rem;
+  background: linear-gradient(145deg, rgba($green, 0.08), transparent 65%), $white;
+
+  &__brand {
+    display: inline-flex;
+    padding: 0.35rem 0.75rem;
+    border-radius: $radius-full;
+    background: $green-light;
+    color: $green-90;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 1rem 0;
+    color: $text-dark;
+    font-family: $font-display;
+    font-size: 1.35rem;
+  }
+
+  dl {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+  }
+
+  dl > div {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  dt {
+    color: $text-muted;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 0;
+    color: $text-dark;
+    font-weight: 650;
+  }
+}
+
+.noteCard {
+  padding: 1.5rem;
+
+  h3 {
+    margin: 0 0 1rem;
+    color: $text-dark;
+    font-family: $font-display;
+    font-size: 1rem;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.8rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 1.35rem 1fr;
+    gap: 0.55rem;
+    color: $text-body;
+    font-size: 0.84rem;
+    line-height: 1.55;
+  }
+
+  li > span {
+    display: grid;
+    width: 1.25rem;
+    height: 1.25rem;
+    place-items: center;
+    border-radius: 50%;
+    background: $green-light;
+    color: $green;
+    font-size: 0.7rem;
+    font-weight: 800;
+  }
+}
+
+.formCard {
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  box-shadow: $shadow-md;
+}
+
+.formHeader,
+.talkshowHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+
+  h2 {
+    margin: 0 0 0.35rem;
+    color: $text-dark;
+    font-family: $font-display;
+    font-size: clamp(1.35rem, 3vw, 1.75rem);
+    letter-spacing: -0.025em;
+  }
+
+  p {
+    margin: 0;
+    color: $text-muted;
+    font-size: 0.88rem;
+  }
+
+  > span {
+    display: grid;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border-radius: 50%;
+    background: $text-dark;
+    color: $white;
+    font-family: $font-display;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+}
+
+.fieldsGrid {
+  display: grid;
+  gap: 1.15rem;
+  margin-top: 1.75rem;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  label {
+    display: grid;
+    align-content: start;
+    gap: 0.48rem;
+  }
+
+  label > span {
+    color: $text-dark;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  em {
+    margin-left: 0.25rem;
+    color: $text-muted;
+    font-size: 0.73rem;
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 0.86rem 1rem;
+    border: 1px solid $mid-gray;
+    border-radius: $radius-md;
+    outline: none;
+    background: $white;
+    color: $text-dark;
+    font: inherit;
+    font-size: 0.92rem;
+    transition:
+      border-color $transition-fast,
+      box-shadow $transition-fast;
+
+    &:focus {
+      border-color: $green;
+      box-shadow: 0 0 0 3px rgba($green, 0.12);
+    }
+
+    &[aria-invalid='true'] {
+      border-color: $red;
+    }
+  }
+
+  textarea {
+    min-height: 7rem;
+    resize: vertical;
+  }
+
+  small {
+    color: $red;
+    font-size: 0.74rem;
+  }
+}
+
+.fieldFull {
+  @media (min-width: $bp-md) {
+    grid-column: 1 / -1;
+  }
+}
+
+.formDivider {
+  height: 1px;
+  margin: 2.3rem 0;
+  background: $mid-gray;
+}
+
+.talkshows {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+}
+
+.talkshow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.4rem minmax(0, 1fr);
+  gap: 0.85rem;
+  padding: 1rem;
+  border: 1px solid $mid-gray;
+  border-radius: $radius-md;
+  background: $white;
+  cursor: pointer;
+  transition:
+    transform $transition-fast,
+    border-color $transition-fast,
+    background $transition-fast;
+
+  @media (min-width: $bp-sm) {
+    grid-template-columns: 1.4rem minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  &:hover:not(.talkshowDisabled) {
+    transform: translateY(-1px);
+    border-color: rgba($green, 0.55);
+  }
+
+  > input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__content {
+    display: grid;
+    gap: 0.22rem;
+
+    strong {
+      color: $text-dark;
+      font-family: $font-display;
+      font-size: 0.95rem;
+      line-height: 1.35;
+    }
+
+    > span {
+      color: $text-muted;
+      font-size: 0.76rem;
+    }
+  }
+}
+
+.checkbox {
+  display: grid;
+  width: 1.35rem;
+  height: 1.35rem;
+  place-items: center;
+  border: 1.5px solid #c9d0d8;
+  border-radius: 5px;
+  color: transparent;
+  font-size: 0.72rem;
+  font-weight: 800;
+  transition: all $transition-fast;
+}
+
+.talkshowSelected {
+  border-color: $green;
+  background: $green-light;
+
+  .checkbox {
+    border-color: $green;
+    background: $green;
+    color: $white;
+  }
+}
+
+.talkshowDisabled {
+  background: $light-gray;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.availability {
+  grid-column: 2;
+  width: fit-content;
+  padding: 0.28rem 0.6rem;
+  border-radius: $radius-full;
+  background: $green-light;
+  color: $green-90;
+  font-size: 0.67rem;
+  font-weight: 750;
+  white-space: nowrap;
+
+  @media (min-width: $bp-sm) {
+    grid-column: auto;
+  }
+
+  &_waitlist {
+    background: $yellow-light;
+    color: $orange-90;
+  }
+
+  &_full,
+  &_closed {
+    background: $red-light;
+    color: $red-90;
+  }
+}
+
+.skeleton {
+  height: 6rem;
+  border-radius: $radius-md;
+  background: linear-gradient(90deg, $light-gray 25%, $off-white 50%, $light-gray 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.3s infinite;
+}
+
+.loadState {
+  margin-top: 1.75rem;
+  padding: 2rem;
+  border: 1px solid rgba($red, 0.25);
+  border-radius: $radius-md;
+  background: $red-light;
+
+  strong {
+    color: $red-90;
+  }
+
+  p {
+    margin: 0.35rem 0 1rem;
+    font-size: 0.82rem;
+  }
+
+  button {
+    padding: 0.65rem 1rem;
+    border-radius: $radius-full;
+    background: $text-dark;
+    color: $white;
+    font-weight: 700;
+  }
+}
+
+.sectionError {
+  margin: 0.75rem 0 0;
+  color: $red;
+  font-size: 0.8rem;
+}
+
+.submitError {
+  margin-top: 1.25rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba($red, 0.25);
+  border-radius: $radius-md;
+  background: $red-light;
+  color: $red-90;
+  font-size: 0.82rem;
+}
+
+.consent {
+  margin: 1.5rem 0 1rem;
+  color: $text-muted;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+.submitButton {
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 0.95rem 1.5rem;
+  border-radius: $radius-full;
+  background: $green;
+  box-shadow: 0 8px 20px rgba($green, 0.24);
+  color: $white;
+  font-size: 0.9rem;
+  font-weight: 750;
+  transition:
+    transform $transition-fast,
+    box-shadow $transition-fast,
+    opacity $transition-fast;
+
+  svg {
+    width: 1.05rem;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba($green, 0.3);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: $bp-md) {
+  .hero {
+    padding: 8.5rem 0 3.5rem;
+  }
+
+  .contentSection {
+    padding: 1.5rem 0 4rem;
+  }
+}

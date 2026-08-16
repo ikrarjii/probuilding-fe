@@ -1,0 +1,524 @@
+.page {
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 8%, rgba($green, 0.13), transparent 30rem), $off-white;
+}
+
+.content {
+  padding: 9.5rem 0 6rem;
+  text-align: center;
+}
+
+.container {
+  max-width: 920px;
+
+  > h1 {
+    max-width: 760px;
+    margin: 1rem auto;
+    color: $text-dark;
+    font-family: $font-display;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    line-height: 1.04;
+    letter-spacing: -0.05em;
+  }
+}
+
+.successMark,
+.errorMark {
+  display: grid;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin: 0 auto 1.5rem;
+  place-items: center;
+  border-radius: 50%;
+  color: $white;
+}
+
+.successMark {
+  background: $green;
+  box-shadow: 0 14px 34px rgba($green, 0.28);
+
+  svg {
+    width: 2.2rem;
+  }
+}
+
+.errorMark {
+  background: $red;
+  font-family: $font-display;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  max-width: 650px;
+  margin: 0 auto;
+  color: $text-muted;
+}
+
+.ticketCard {
+  margin-top: 2.5rem;
+  overflow: hidden;
+  border: 1px solid $mid-gray;
+  border-radius: $radius-lg;
+  background: $white;
+  box-shadow: $shadow-lg;
+  text-align: left;
+}
+
+.ticketHeader {
+  display: flex;
+  min-height: 5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: $text-dark;
+  color: $white;
+
+  > div {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  span {
+    color: rgba($white, 0.66);
+    font-size: 0.68rem;
+    font-weight: 750;
+    letter-spacing: 0.12em;
+  }
+
+  strong {
+    font-family: $font-display;
+    font-size: 1.15rem;
+  }
+
+  i {
+    width: 0.55rem;
+    height: 0.55rem;
+    margin-right: 3rem;
+    border-radius: 50%;
+    background: $red;
+    box-shadow:
+      1rem 0 0 $green,
+      2rem 0 0 $blue,
+      3rem 0 0 $yellow;
+  }
+}
+
+.ticketBody {
+  display: grid;
+  border-bottom: 1px dashed #cdd4dc;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: minmax(0, 1fr) 320px;
+  }
+}
+
+.ticketInformation {
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.registrationNumber {
+  display: grid;
+  gap: 0.25rem;
+  margin-bottom: 1.75rem;
+
+  span {
+    color: $text-muted;
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  strong {
+    color: $green-90;
+    font-family: $font-display;
+    font-size: clamp(1.8rem, 5vw, 2.7rem);
+    letter-spacing: 0.035em;
+  }
+}
+
+.details {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+
+  @media (min-width: $bp-sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  > div {
+    display: grid;
+    align-content: start;
+    gap: 0.25rem;
+  }
+
+  dt {
+    color: $text-muted;
+    font-size: 0.67rem;
+    font-weight: 750;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  dd {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0;
+    color: $text-dark;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+
+  dd small {
+    color: $text-muted;
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+}
+
+.status {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.35rem 0.65rem;
+  border-radius: $radius-full;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+
+  &_not_checked_in {
+    background: $red-light;
+    color: $red-90;
+  }
+
+  &_partially_checked_in {
+    background: $yellow-light;
+    color: $orange-90;
+  }
+
+  &_checked_in {
+    background: $green-light;
+    color: $green-90;
+  }
+}
+
+.qrPanel {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5rem;
+  border-top: 1px dashed #cdd4dc;
+  text-align: center;
+
+  @media (min-width: $bp-md) {
+    border-top: 0;
+    border-left: 1px dashed #cdd4dc;
+  }
+
+  > strong {
+    margin-top: 0.75rem;
+    color: $text-dark;
+    font-family: $font-display;
+    font-size: 0.9rem;
+  }
+
+  > p {
+    max-width: 240px;
+    margin: 0.3rem auto 0;
+    color: $text-muted;
+    font-size: 0.7rem;
+    line-height: 1.5;
+  }
+}
+
+.qrFrame {
+  width: min(100%, 230px);
+  aspect-ratio: 1;
+  padding: 0.65rem;
+  border: 1px solid $mid-gray;
+  border-radius: $radius-md;
+  background: $white;
+  box-shadow: $shadow-sm;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.ticketSection {
+  padding: 1.5rem clamp(1.5rem, 4vw, 2.25rem);
+  border-bottom: 1px solid $mid-gray;
+
+  > h2 {
+    margin: 0 0 1rem;
+    color: $text-dark;
+    font-family: $font-display;
+    font-size: 1.05rem;
+  }
+}
+
+.sessionColumns {
+  display: grid;
+  gap: 1.2rem;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.sessionGroup {
+  h3 {
+    margin: 0 0 0.65rem;
+    color: $text-muted;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 1.4rem minmax(0, 1fr);
+    gap: 0.65rem;
+    padding: 0.8rem;
+    border: 1px solid $mid-gray;
+    border-radius: $radius-sm;
+  }
+
+  li > div {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  strong {
+    color: $text-dark;
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  small,
+  em {
+    color: $text-muted;
+    font-size: 0.67rem;
+    font-style: normal;
+  }
+
+  em {
+    color: $orange-90;
+    font-weight: 700;
+  }
+}
+
+.sessionIcon {
+  display: grid;
+  width: 1.35rem;
+  height: 1.35rem;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 0.72rem;
+  font-weight: 800;
+
+  &_confirmed {
+    background: $green-light;
+    color: $green;
+  }
+
+  &_waitlisted {
+    background: $yellow-light;
+    color: $orange-90;
+  }
+}
+
+.emptyState {
+  margin: 0;
+  padding: 1rem;
+  border-radius: $radius-sm;
+  background: $light-gray;
+  color: $text-muted;
+  font-size: 0.8rem;
+}
+
+.dayGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.dayCard {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem;
+  border: 1px solid $mid-gray;
+  border-radius: $radius-sm;
+  text-align: center;
+
+  span {
+    color: $text-muted;
+    font-size: 0.67rem;
+  }
+
+  strong {
+    color: $text-dark;
+    font-family: $font-display;
+    font-size: 0.86rem;
+  }
+
+  em {
+    font-size: 0.6rem;
+    font-style: normal;
+    font-weight: 800;
+  }
+}
+
+.dayStatus_not_checked_in {
+  color: $red-90;
+}
+
+.dayStatus_checked_in {
+  color: $green-90;
+}
+
+.ticketFooter {
+  padding: 0.9rem 1.5rem;
+  background: $light-gray;
+  color: $text-muted;
+  font-size: 0.67rem;
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.downloadButton,
+.homeButton,
+.stateContainer button,
+.stateContainer a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.4rem;
+  border-radius: $radius-full;
+  font-size: 0.82rem;
+  font-weight: 750;
+  transition:
+    transform $transition-fast,
+    box-shadow $transition-fast;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.downloadButton {
+  gap: 0.55rem;
+  background: $green;
+  box-shadow: 0 9px 22px rgba($green, 0.24);
+  color: $white;
+
+  svg {
+    width: 1rem;
+  }
+}
+
+.homeButton {
+  border: 1px solid $mid-gray;
+  background: $white;
+  color: $text-dark;
+}
+
+.stateContainer {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: 8rem;
+  text-align: center;
+
+  h1 {
+    margin: 0 0 0.75rem;
+    color: $text-dark;
+    font-family: $font-display;
+  }
+
+  p {
+    max-width: 520px;
+    color: $text-muted;
+  }
+
+  button {
+    margin-top: 1rem;
+    background: $green;
+    color: $white;
+  }
+
+  a {
+    color: $green-90;
+  }
+}
+
+.loader {
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid rgba($green, 0.18);
+  border-top-color: $green;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: $bp-sm) {
+  .content {
+    padding: 8.5rem 0 4rem;
+  }
+
+  .ticketHeader i {
+    display: none;
+  }
+}
+
+@media print {
+  .page {
+    background: $white;
+  }
+
+  .content {
+    padding: 0;
+  }
+
+  .container > :not(.ticketCard),
+  .actions {
+    display: none;
+  }
+
+  .ticketCard {
+    margin: 0;
+    box-shadow: none;
+  }
+}

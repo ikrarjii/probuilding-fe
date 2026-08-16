@@ -1,0 +1,466 @@
+@use './variables' as *;
+// Import Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+// Reset & Base
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: $font-body;
+  font-size: 1rem;
+  color: $text-body;
+  background-color: $white;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: $font-body;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+// Container
+.container {
+  width: 100%;
+  max-width: $container-max;
+  margin-inline: auto;
+  padding-inline: $container-pad;
+
+  @media (min-width: $bp-lg) {
+    padding-inline: 2.5rem;
+  }
+}
+
+// Section padding
+.section {
+  padding-block: 5rem;
+
+  @media (min-width: $bp-lg) {
+    padding-block: 7rem;
+  }
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: $text-muted;
+    margin-bottom: 1rem;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: $red;
+      border-radius: 2px;
+    }
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: $text-dark;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+  }
+
+  &__subtitle {
+    font-size: 1.1rem;
+    color: $text-muted;
+    margin-top: 0.75rem;
+    max-width: 52ch;
+  }
+
+  &__header {
+    margin-bottom: 4rem;
+  }
+
+  &--dark {
+    background: $text-dark;
+
+    .section__label {
+      color: rgba(255, 255, 255, 0.45);
+
+      &::before {
+        background: $red;
+      }
+    }
+
+    .section__title {
+      color: $white;
+    }
+
+    .section__subtitle {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  &--light {
+    background: $off-white;
+  }
+}
+
+// Grid helpers
+.grid-2 {
+  display: grid;
+  gap: 1.5rem;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.grid-3 {
+  display: grid;
+  gap: 1.5rem;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: $bp-lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.grid-4 {
+  display: grid;
+  gap: 1.5rem;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: $bp-lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+// Button base
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  border-radius: $radius-full;
+  font-family: $font-body;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: $transition-base;
+  cursor: pointer;
+  border: 2px solid transparent;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.15);
+    opacity: 0;
+    transition: $transition-fast;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &--primary {
+    background: $red;
+    color: $white;
+    box-shadow: 0 4px 20px color.change($red, $alpha: 0.35);
+
+    &:hover {
+      background: color.adjust($red, $lightness: -6%);
+      box-shadow: 0 8px 28px color.change($red, $alpha: 0.45);
+      transform: translateY(-2px);
+    }
+  }
+
+  &--outline {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.4);
+    color: $white;
+    backdrop-filter: blur(8px);
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  &--outline-dark {
+    background: transparent;
+    border-color: $mid-gray;
+    color: $text-dark;
+
+    &:hover {
+      border-color: $text-dark;
+      background: $text-dark;
+      color: $white;
+    }
+  }
+
+  &--blue {
+    background: $blue;
+    color: $white;
+    box-shadow: 0 4px 20px color.change($blue, $alpha: 0.3);
+
+    &:hover {
+      background: color.adjust($blue, $lightness: -6%);
+      transform: translateY(-2px);
+    }
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    transition: transform $transition-fast;
+  }
+
+  &:hover svg {
+    transform: translateX(3px);
+  }
+}
+
+// Tag / badge
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  border-radius: $radius-full;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  &--red {
+    background: $red-light;
+    color: $red;
+  }
+  &--green {
+    background: $green-light;
+    color: $green;
+  }
+  &--blue {
+    background: $blue-light;
+    color: $blue;
+  }
+  &--yellow {
+    background: $yellow-light;
+    color: color.adjust($yellow, $lightness: -15%);
+  }
+}
+
+// Animation utilities
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.7s ease forwards;
+}
+
+.animate-delay-1 {
+  animation-delay: 0.1s;
+}
+.animate-delay-2 {
+  animation-delay: 0.2s;
+}
+.animate-delay-3 {
+  animation-delay: 0.35s;
+}
+.animate-delay-4 {
+  animation-delay: 0.5s;
+}
+.animate-delay-5 {
+  animation-delay: 0.65s;
+}
+
+// Intersection Observer fade-in
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+
+  &.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+
+  &.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Delay helpers for reveals
+.delay-1 {
+  transition-delay: 0.1s;
+}
+.delay-2 {
+  transition-delay: 0.2s;
+}
+.delay-3 {
+  transition-delay: 0.3s;
+}
+.delay-4 {
+  transition-delay: 0.4s;
+}
+.delay-5 {
+  transition-delay: 0.5s;
+}
+
+// Divider
+.divider {
+  height: 1px;
+  background: $mid-gray;
+  margin-block: 0;
+}
+
+// Scrollbar custom
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: $off-white;
+}
+::-webkit-scrollbar-thumb {
+  background: $mid-gray;
+  border-radius: 3px;
+
+  &:hover {
+    background: color.adjust($mid-gray, $lightness: -10%);
+  }
+}
+
+// Selection
+::selection {
+  background: color.change($red, $alpha: 0.15);
+  color: $text-dark;
+}

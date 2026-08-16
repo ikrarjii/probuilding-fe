@@ -1,0 +1,217 @@
+@use '../../styles/variables' as *;
+
+.section {
+  background: $off-white;
+}
+
+.accent { color: $red; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: $bp-lg) {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 220px;
+  }
+}
+
+.item {
+  cursor: pointer;
+  border-radius: $radius-md;
+  overflow: hidden;
+
+  @media (min-width: $bp-lg) {
+    &__featured {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+  }
+
+  &__inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+    overflow: hidden;
+    border-radius: $radius-md;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  &:hover img {
+    transform: scale(1.08);
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      color.change($text-dark, $alpha: 0.75) 0%,
+      color.change($text-dark, $alpha: 0.2) 40%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity $transition-base;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 1.25rem;
+  }
+
+  &:hover &__overlay {
+    opacity: 1;
+  }
+
+  &__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $white;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  &__zoom {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    transition: background $transition-fast;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      color: $white;
+    }
+
+    &:hover {
+      background: rgba(255,255,255,0.25);
+    }
+  }
+}
+
+// Lightbox
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: color.change($text-dark, $alpha: 0.96);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lightbox__close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: $transition-fast;
+  z-index: 2;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: $white;
+  }
+
+  &:hover {
+    background: rgba(255,255,255,0.2);
+  }
+}
+
+.lightbox__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: $transition-fast;
+  z-index: 2;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    color: $white;
+  }
+
+  &:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-50%) scale(1.05);
+  }
+}
+
+.lightbox__prev { left: 1.5rem; }
+.lightbox__next { right: 1.5rem; }
+
+.lightbox__content {
+  max-width: 90vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: scaleIn 0.3s ease;
+
+  img {
+    max-height: 78vh;
+    max-width: 85vw;
+    object-fit: contain;
+    border-radius: $radius-md;
+    box-shadow: $shadow-xl;
+  }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.lightbox__info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 0.25rem;
+}
+
+.lightbox__counter {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.4);
+  font-weight: 500;
+}

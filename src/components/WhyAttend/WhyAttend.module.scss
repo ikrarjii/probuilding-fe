@@ -1,0 +1,234 @@
+@use '../../styles/variables' as *;
+
+.section {
+  position: relative;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 4rem;
+
+  @media (min-width: $bp-lg) {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 3rem;
+  }
+}
+
+.accent {
+  color: $red;
+}
+
+.accentRed {
+  color: $red-50;
+}
+.accentGreen {
+  color: $green-50;
+}
+.accentBlue {
+  color: $blue-50;
+}
+.accentOrange {
+  color: $orange-50;
+}
+
+.cards {
+  display: grid;
+  gap: 1.5rem;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: $bp-xl) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.card {
+  position: relative;
+  background: $white;
+  border: 1px solid $mid-gray;
+  border-radius: $radius-lg;
+  padding: 2rem;
+  transition: $transition-base;
+  overflow: hidden;
+  cursor: default;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--icon-color);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform $transition-base;
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: $shadow-lg;
+    border-color: transparent;
+
+    &::before {
+      transform: scaleX(1);
+    }
+
+    .card__icon {
+      transform: scale(1.08);
+    }
+
+    .card__arrow {
+      transform: translateX(4px);
+    }
+  }
+
+  &__number {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    font-family: $font-display;
+    font-size: 3rem;
+    font-weight: 800;
+    color: $mid-gray;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    transition: color $transition-base;
+  }
+
+  &:hover .card__number {
+    color: var(--icon-color);
+    opacity: 0.15;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: $radius-md;
+    background: var(--icon-bg);
+    border: 1.5px solid var(--icon-border);
+    margin-bottom: 1.25rem;
+    transition: transform $transition-base;
+    color: var(--icon-color);
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $text-dark;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  &__desc {
+    font-size: 0.9rem;
+    color: $text-muted;
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: auto;
+  }
+
+  &__more {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--icon-color);
+  }
+
+  &__arrow {
+    width: 16px;
+    height: 16px;
+    color: var(--icon-color);
+    transition: transform $transition-fast;
+  }
+}
+
+// Bottom CTA
+.bottomCta {
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-start;
+  padding: 2.5rem;
+  background: $text-dark;
+  border-radius: $radius-lg;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2rem;
+    right: -2rem;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, color.change($red, $alpha: 0.2) 0%, transparent 70%);
+  }
+
+  @media (min-width: $bp-md) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    position: relative;
+    z-index: 1;
+
+    strong {
+      font-family: $font-display;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: $white;
+      letter-spacing: -0.02em;
+    }
+
+    span {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  &__btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.btnProgram {
+  background: $text-body;
+  color: $white;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: color.adjust($text-body, $lightness: 10%);
+    transform: translateY(-2px);
+  }
+}

@@ -1,0 +1,251 @@
+@use '../../styles/variables' as *;
+
+.about {
+  background: $white;
+}
+
+.grid {
+  display: grid;
+  gap: 4rem;
+  align-items: center;
+  margin-bottom: 5rem;
+
+  @media (min-width: $bp-lg) {
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+  }
+}
+
+// Text column
+.textCol {
+  .body {
+    font-size: 1.05rem;
+    color: $text-body;
+    line-height: 1.75;
+    margin-top: 1.5rem;
+
+    & + .body {
+      margin-top: 1rem;
+    }
+  }
+}
+
+.accent {
+  color: $red;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.75rem 0 2rem;
+}
+
+// Image column
+// .imageCol {}
+
+.imageWrap {
+  position: relative;
+  border-radius: $radius-xl;
+  overflow: visible;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: $radius-xl;
+    background: linear-gradient(
+      135deg,
+      color.change($red, $alpha: 0.3),
+      color.change($blue, $alpha: 0.2),
+      transparent 60%
+    );
+    z-index: 0;
+  }
+}
+
+.image {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  border-radius: $radius-xl;
+  position: relative;
+  z-index: 1;
+  box-shadow: $shadow-xl;
+
+  @media (max-width: $bp-md) {
+    height: 320px;
+  }
+}
+
+// Floating card
+.floatCard {
+  position: absolute;
+  bottom: -1.5rem;
+  left: -1.5rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: $white;
+  border-radius: $radius-md;
+  box-shadow: $shadow-lg;
+  border: 1px solid $mid-gray;
+
+  @media (max-width: $bp-sm) {
+    bottom: 1rem;
+    left: 1rem;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  strong {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $text-dark;
+  }
+
+  span {
+    font-size: 0.72rem;
+    color: $text-muted;
+  }
+}
+
+.floatCard__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: $green;
+  box-shadow: 0 0 0 3px color.change($green, $alpha: 0.2);
+  flex-shrink: 0;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px color.change($green, $alpha: 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 7px color.change($green, $alpha: 0.08);
+  }
+}
+
+// Decorative elements
+.deco1 {
+  position: absolute;
+  top: -1.5rem;
+  right: -1.5rem;
+  width: 80px;
+  height: 80px;
+  border-radius: $radius-md;
+  background: $red-light;
+  border: 2px solid color.change($red, $alpha: 0.2);
+  z-index: 0;
+
+  @media (max-width: $bp-md) {
+    display: none;
+  }
+}
+
+.deco2 {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 48px;
+  height: 48px;
+  border-radius: $radius-sm;
+  background: $blue;
+  z-index: 0;
+
+  @media (max-width: $bp-md) {
+    display: none;
+  }
+}
+
+// Highlights strip
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: $mid-gray;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-sm;
+  border: 1px solid $mid-gray;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.highlight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 2rem 1.5rem;
+  background: $white;
+  text-align: center;
+  transition: $transition-base;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    opacity: 0;
+    transition: opacity $transition-fast;
+  }
+
+  &:hover {
+    background: $off-white;
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &--red::before {
+    background: $red;
+  }
+  &--blue::before {
+    background: $blue;
+  }
+  &--green::before {
+    background: $green;
+  }
+  &--yellow::before {
+    background: $yellow;
+  }
+
+  &__icon {
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  &__value {
+    font-family: $font-display;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 800;
+    color: $text-dark;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  &__label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: $text-muted;
+    letter-spacing: 0.04em;
+  }
+}

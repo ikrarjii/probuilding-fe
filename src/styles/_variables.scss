@@ -1,0 +1,80 @@
+// Color Palette
+$white: #ffffff;
+$off-white: #f8f9fa;
+$light-gray: #f2f4f6;
+$mid-gray: #e5e8ec;
+$text-dark: #0d1117;
+$text-body: #3a4452;
+$text-muted: #7a8899;
+
+// Accent Colors (subtle, logo-inspired)
+$red: #e8303a;
+$red-light: #fff0f1;
+$green: #2d9c6e;
+$green-light: #edfaf4;
+$blue: #1a5fd6;
+$blue-light: #eef4ff;
+$yellow: #f5a623;
+$yellow-light: #fff9ed;
+
+$red-10: #e33d35;
+$red-50: #c41e20;
+$red-90: #8b1a1a;
+
+$green-10: #8cc63f;
+$green-50: #39b54a;
+$green-90: #006837;
+
+$blue-10: #4498db;
+$blue-50: #2d7bc8;
+$blue-90: #1b4f9c;
+
+$orange-10: #fdc82f;
+$orange-50: #f7941d;
+$orange-90: #d96d00;
+
+// Brand gradient
+$gradient-hero: linear-gradient(135deg, #0d1117 0%, #1a2638 60%, #0d1117 100%);
+$gradient-red: linear-gradient(135deg, $red 0%, #c0202a 100%);
+$gradient-blue: linear-gradient(135deg, $blue 0%, #0e3f9e 100%);
+
+// Typography
+$font-display: 'Space Grotesk', sans-serif;
+$font-body: 'Plus Jakarta Sans', sans-serif;
+
+// Spacing
+$space-xs: 0.5rem;
+$space-sm: 1rem;
+$space-md: 1.5rem;
+$space-lg: 2.5rem;
+$space-xl: 4rem;
+$space-xxl: 7rem;
+
+// Border
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 20px;
+$radius-xl: 32px;
+$radius-full: 9999px;
+
+// Shadow
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+$shadow-md: 0 6px 24px rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
+$shadow-xl: 0 32px 80px rgba(0, 0, 0, 0.16);
+
+// Transitions
+$transition-fast: 0.2s ease;
+$transition-base: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$transition-slow: 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+// Breakpoints
+$bp-sm: 576px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+$bp-xxl: 1440px;
+
+// Container
+$container-max: 1240px;
+$container-pad: 1.5rem;

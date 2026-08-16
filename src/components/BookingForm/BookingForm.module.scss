@@ -1,0 +1,197 @@
+@use '../../styles/variables' as *;
+
+.section {
+  background: $text-dark;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, color.change($blue, $alpha: 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -100px;
+    left: -100px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, color.change($red, $alpha: 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+.grid {
+  display: grid;
+  gap: 4rem;
+  align-items: start;
+  position: relative;
+  z-index: 1;
+
+  @media (min-width: $bp-lg) {
+    grid-template-columns: 1fr 1.4fr;
+    gap: 6rem;
+  }
+}
+
+// Info section
+.info {
+  .section__label {
+    color: rgba(255, 255, 255, 0.45) !important;
+  }
+}
+
+.infoTitle {
+  color: $white !important;
+  margin-top: 0.5rem;
+}
+
+.accent {
+  color: $red;
+}
+
+.infoBody {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.7;
+  margin: 1.5rem 0 2rem;
+}
+
+.benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+
+  &__icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  strong {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: $white;
+  }
+
+  span {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: $radius-md;
+
+  &__phone {
+    color: $white;
+  }
+
+  span {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 0.25rem;
+  }
+
+  a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $white;
+    }
+  }
+}
+
+// CTA panel
+.formWrap {
+  background: $white;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  box-shadow: $shadow-xl;
+}
+
+.ctaPanel {
+  padding: 2.5rem;
+
+  @media (max-width: $bp-sm) {
+    padding: 1.5rem;
+  }
+
+  &__header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid $mid-gray;
+    text-align: center;
+
+    h3 {
+      font-family: $font-display;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: $text-dark;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.3rem;
+    }
+
+    p {
+      font-size: 0.85rem;
+      color: $text-muted;
+    }
+  }
+}
+
+.ctaButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ctaBtn {
+  width: 100%;
+  padding: 1rem 1.5rem !important;
+  font-size: 1rem !important;
+  gap: 0.625rem;
+  text-decoration: none;
+  justify-content: center;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+}
+
+.ctaBtnSecondary {
+  border-width: 1.5px !important;
+}

@@ -1,0 +1,173 @@
+@use '../../styles/variables' as *;
+
+.page {
+  min-height: 100vh;
+  background: $white;
+  padding-top: 80px;
+}
+
+.header {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid $mid-gray;
+  background: $white;
+  position: sticky;
+  top: 80px;
+  z-index: 10;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $text-body;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0.5rem 0;
+  transition: $transition-fast;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    color: $red;
+  }
+}
+
+.heroImg {
+  height: 400px;
+  position: relative;
+  overflow: hidden;
+
+  @media (min-width: $bp-md) {
+    height: 500px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, color.change($white, $alpha: 0.3), transparent 60%);
+  }
+}
+
+.content {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 0 6rem;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: $text-muted;
+}
+
+.title {
+  font-family: $font-display;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: $text-dark;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.75rem;
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-bottom: 1.75rem;
+
+  &__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $blue, $green);
+    color: $white;
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  strong {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: $text-dark;
+  }
+
+  span {
+    font-size: 0.78rem;
+    color: $text-muted;
+  }
+}
+
+.divider {
+  height: 1px;
+  background: $mid-gray;
+  margin-bottom: 2rem;
+}
+
+.body {
+  p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: $text-body;
+    margin-bottom: 1.25rem;
+
+    &:first-child {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: $text-dark;
+      line-height: 1.65;
+    }
+  }
+}
+
+.footer {
+  margin-top: 3rem;
+  padding: 2.5rem;
+  background: $off-white;
+  border-radius: $radius-lg;
+  border: 1px solid $mid-gray;
+
+  &__cta {
+    font-size: 1rem;
+    color: $text-body;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+
+    strong {
+      color: $red;
+    }
+  }
+
+  &__btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
