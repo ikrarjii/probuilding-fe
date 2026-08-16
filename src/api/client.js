@@ -1,5 +1,8 @@
 const configuredBaseUrl = import.meta.env.VITE_API_URL || '/api';
 const API_BASE_URL = configuredBaseUrl.replace(/\/$/, '');
+const DEFAULT_API_ERROR = 'Terjadi kesalahan saat menghubungi server.';
+const NETWORK_API_ERROR = 'Tidak dapat terhubung ke server registrasi.';
+const INVALID_RESPONSE_ERROR = 'Server registrasi mengirim respons yang tidak valid.';
 
 export class ApiError extends Error {
   constructor(message, status, errors = {}) {
@@ -10,25 +13,77 @@ export class ApiError extends Error {
   }
 }
 
-async function request(path, options = {}) {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-    credentials: 'same-origin',
-    headers: {
-      Accept: 'application/json',
-      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
-      ...options.headers,
-    },
-  });
+function logDevelopmentError({ url, method, status, responseBody, error }) {
+  if (!import.meta.env.DEV) return;
 
-  const payload = await response.json().catch(() => ({}));
+  console.error('[ProBuild API request failed]', {
+    requestUrl: url,
+    httpMethod: method,
+    httpStatus: status,
+    responseBody,
+    errorType: error.name,
+    errorMessage: error.message,
+  });
+}
+
+async function request(path, options = {}) {
+  const url = `${API_BASE_URL}${path}`;
+  const method = options.method || 'GET';
+  let response;
+
+  try {
+    response = await fetch(url, {
+      ...options,
+      credentials: 'same-origin',
+      headers: {
+        Accept: 'application/json',
+        ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+        ...options.headers,
+      },
+    });
+  } catch (error) {
+    if (error.name === 'AbortError') throw error;
+
+    const apiError = new ApiError(import.meta.env.DEV ? error.message : NETWORK_API_ERROR, 0);
+    logDevelopmentError({
+      url,
+      method,
+      status: null,
+      responseBody: null,
+      error,
+    });
+    throw apiError;
+  }
+
+  const responseBody = await response.text();
+  let payload = {};
+
+  if (responseBody) {
+    try {
+      payload = JSON.parse(responseBody);
+    } catch {
+      const error = new ApiError(INVALID_RESPONSE_ERROR, response.status);
+      logDevelopmentError({ url, method, status: response.status, responseBody, error });
+      throw error;
+    }
+  }
 
   if (!response.ok) {
-    throw new ApiError(
-      payload.message || 'Terjadi kesalahan saat menghubungi server.',
+    const error = new ApiError(
+      import.meta.env.PROD && response.status >= 500
+        ? DEFAULT_API_ERROR
+        : payload.message || DEFAULT_API_ERROR,
       response.status,
       payload.errors || {}
     );
+    logDevelopmentError({ url, method, status: response.status, responseBody, error });
+    throw error;
+  }
+
+  if (!payload || typeof payload !== 'object' || !Object.hasOwn(payload, 'data')) {
+    const error = new ApiError(INVALID_RESPONSE_ERROR, response.status);
+    logDevelopmentError({ url, method, status: response.status, responseBody, error });
+    throw error;
   }
 
   return payload.data;

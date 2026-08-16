@@ -81,6 +81,20 @@ npm run dev
 
 The Vite server proxies `/api` to `VITE_API_PROXY_TARGET`, which defaults to `http://127.0.0.1:8000`.
 
+The local frontend configuration must keep the Laravel `/api` prefix:
+
+```dotenv
+VITE_API_URL=/api
+VITE_API_PROXY_TARGET=http://127.0.0.1:8000
+VITE_EVENT_SLUG=probuild-intim-2026
+```
+
+If the browser calls Laravel directly instead of using the Vite proxy, configure the backend with the exact permitted frontend origins:
+
+```dotenv
+CORS_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+```
+
 ## Verification
 
 ```bash
@@ -96,10 +110,12 @@ npm run build
 
 - Use PostgreSQL as configured in `server/.env.example`.
 - Serve the SPA and API behind HTTPS, preferably on the same origin with `/api` routed to Laravel.
+- For the current separate API deployment, build the frontend with `VITE_API_URL=https://backend.probuildintim.com/api` and configure Laravel with `CORS_ALLOWED_ORIGINS=https://www.probuildintim.com,https://probuildintim.com`.
 - Set `PUBLIC_WEB_URL` to that public HTTPS origin before distributing tickets.
 - Set a unique production `APP_KEY`; changing it later will make encrypted QR identities unreadable.
 - Treat e-ticket URLs as bearer secrets, exclude them from analytics/referrer logging, and always use HTTPS.
 - Run migrations with `php artisan migrate --force` and seed the event/reference roles once with `php artisan db:seed --force`.
+- Clear and rebuild Laravel's configuration cache after changing deployment environment variables: `php artisan config:clear` followed by `php artisan config:cache`.
 - Run Laravel's scheduler every minute so the notification outbox is processed continuously.
 - Keep `APP_DEBUG=false`, protect database/backups, configure trusted proxies correctly, and retain audit logs.
 - Session capacities in the seed data are intentionally unset until the organizer supplies authoritative limits.
