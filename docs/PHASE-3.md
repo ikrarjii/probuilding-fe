@@ -1,184 +1,150 @@
-# Phase 3 — Email and WhatsApp E-Ticket Delivery
+# Phase 3 — WhatsApp E-Ticket Delivery
 
 ## Scope
 
-Phase 3 adds reliable registration-confirmation delivery. It reuses the one secure e-ticket URL, QR identity, and on-demand PDF from Phase 2. It does not add dashboards, public recovery, participant management, QR scanning, check-in actions, attendance actions, or reporting.
+Phase 3 sends one WhatsApp registration confirmation that reuses the persistent secure e-ticket URL and QR identity from Phase 2. It does not add email delivery, authentication, dashboards, QR scanning, check-in actions, attendance actions, or reporting.
 
 ## Delivery flow
 
 ```text
 Registration transaction
   -> registration and talkshow outcomes saved
-  -> one email delivery + unique outbox row saved
-  -> one WhatsApp delivery + unique outbox row saved
+  -> one WhatsApp delivery and one unique outbox row saved
   -> HTTP registration response succeeds
 
-Scheduled outbox processor
+Outbox processor
   -> claims one available outbox row
-  -> builds current confirmation from the registration
-  -> uses the existing e-ticket URL
-  -> invokes the configured channel provider
-  -> marks delivery SENT or FAILED
-  -> schedules bounded exponential retry when appropriate
+  -> builds the message from the saved registration
+  -> reuses the existing secure e-ticket URL
+  -> invokes the configured WhatsApp provider
+  -> records SENT or FAILED and schedules a bounded retry
 ```
 
-No provider call occurs inside the registration request. A provider outage therefore cannot roll back or invalidate a successful registration.
+No provider call occurs inside the registration transaction. A WhatsApp outage therefore cannot roll back or invalidate a successful registration.
 
-## Data and idempotency
+## Architecture and stored data
 
-- `ticket_deliveries` stores channel, notification type, provider label, status, cumulative attempts, last/next attempt timestamps, safe error text, provider message ID, and a unique idempotency key.
-- A unique `(registration_id, channel, notification_type)` constraint prevents duplicate confirmation deliveries.
-- `outbox_messages.deduplication_key` prevents duplicate work items.
-- The processor reserves work before sending, recovers stale reservations, and stops automatically after `NOTIFICATION_MAX_ATTEMPTS`.
-- A retry reuses the original delivery and idempotency key. A `SENT` delivery cannot be retried by the retry service.
-- Provider secrets and complete provider responses are never written to delivery/outbox records.
+- `WhatsAppProvider` is the provider-neutral contract used by the delivery service.
+- `MockWhatsAppProvider` writes a safe test message to `storage/logs/whatsapp-mock.log` and never contacts WhatsApp.
+- `NullWhatsAppProvider` fails safely when no supported provider is configured. Production also refuses to use the mock provider.
+- `ticket_deliveries` stores registration ID, normalized WhatsApp recipient reference, notification type, provider label, `PENDING`/`SENT`/`FAILED` status, attempt count, last attempt, next retry, safe error text, provider message ID, and timestamps.
+- `outbox_messages` separates registration from external delivery and prevents duplicate work.
+- Unique delivery and idempotency keys prevent repeated registration requests from creating unlimited messages.
+- Retry reuses the same delivery, ticket URL, QR identity, and idempotency key.
 
-The idempotency key is passed to every provider adapter. A future HTTP/API adapter must pass it to the provider's native idempotency field when supported. SMTP does not provide universal exactly-once guarantees; see Known limitations.
+Provider secrets and complete provider responses are not stored in delivery or outbox records. The public e-ticket URL contains only the secure opaque Phase 2 token, not the participant name, WhatsApp number, email, or a sequential database ID.
 
-## Message contents
+## WhatsApp message
 
-Both channels use a projection of the saved registration containing:
-
-- participant name;
-- event name and location;
-- registration number;
-- confirmed talkshows;
-- waitlisted talkshows and positions;
-- the exact existing e-ticket URL;
-- short explicit check-in instructions.
-
-Email contains a branded HTML version, a plain-text fallback, a **VIEW E-TICKET** button, and—when enabled—the existing Phase 2 PDF rendered with the same QR identity. WhatsApp uses a concise text message suitable for a later template/API adapter.
+The Indonesian message contains the participant name, event name, registration number, brief check-in instructions, and the exact existing e-ticket URL. The URL opens the database-backed e-ticket containing the current participant, event, talkshow, QR, and check-in information.
 
 ## Environment variables
 
-Safe local defaults:
+Use these safe values locally:
 
 ```dotenv
-REGISTRATION_EMAIL_DRIVER=mock
-REGISTRATION_EMAIL_FROM_ADDRESS=info@probuildintim.com
-REGISTRATION_EMAIL_FROM_NAME="ProBuild INTIM"
-REGISTRATION_EMAIL_ATTACH_PDF=true
-REGISTRATION_EMAIL_MOCK_FAILURE=false
+PUBLIC_WEB_URL=http://localhost:5173
 
 REGISTRATION_WHATSAPP_DRIVER=mock
 REGISTRATION_WHATSAPP_MOCK_FAILURE=false
+REGISTRATION_WHATSAPP_MOCK_LOG_CHANNEL=whatsapp_mock
 
 NOTIFICATION_MAX_ATTEMPTS=5
 NOTIFICATION_RETRY_BASE_MINUTES=5
 NOTIFICATION_CLAIM_TIMEOUT_MINUTES=10
 ```
 
-The mock drivers never contact an external service. In `production`, the application refuses to use mock drivers and marks the corresponding delivery failed safely.
-
-### Email production configuration
-
-The built-in provider-neutral email adapter uses Laravel Mail. Configure it with:
+The following placeholders are reserved for a future production adapter and must stay server-side:
 
 ```dotenv
-REGISTRATION_EMAIL_DRIVER=mail
-REGISTRATION_EMAIL_FROM_ADDRESS=info@your-domain.example
-REGISTRATION_EMAIL_FROM_NAME="ProBuild INTIM"
-REGISTRATION_EMAIL_ATTACH_PDF=true
-
-MAIL_MAILER=smtp
-MAIL_HOST=
-MAIL_PORT=587
-MAIL_USERNAME=
-MAIL_PASSWORD=
-MAIL_SCHEME=null
+REGISTRATION_WHATSAPP_BASE_URL=
+REGISTRATION_WHATSAPP_ACCESS_TOKEN=
+REGISTRATION_WHATSAPP_PHONE_NUMBER_ID=
+REGISTRATION_WHATSAPP_TEMPLATE_NAME=
 ```
 
-Use the exact settings supplied by the selected email service. An API-based email provider can later be added as another `EmailProvider` adapter without changing registration or outbox logic.
-
-### WhatsApp production configuration
-
-No production WhatsApp vendor has been selected, so Phase 3 intentionally contains no invented endpoint or credentials. Keep the channel disabled in production until an approved adapter is implemented:
-
-```dotenv
-REGISTRATION_WHATSAPP_DRIVER=disabled
-```
-
-The future adapter must implement `WhatsAppProvider`, pass the existing message/idempotency key to the selected vendor, use server-side credentials, map provider failures to safe exceptions, and be registered under a new driver name. Existing registration code does not need to change.
-
-After changing environment values:
+Never use `VITE_*` for provider credentials. After changing server environment values, run:
 
 ```powershell
 php artisan config:clear
-php artisan config:cache
 ```
 
-Never put these credentials in `VITE_*` variables or React source files.
+## Local mock test
 
-## Development test
-
-Apply the migration and keep both drivers on `mock`:
+From the repository root, start the PHP API in terminal 1:
 
 ```powershell
 cd server
 php artisan migrate
 php artisan config:clear
+php artisan serve
 ```
 
-1. Register a new test participant from the React form.
-2. Process pending messages:
+Start React in terminal 2:
+
+```powershell
+npm run dev
+```
+
+Then:
+
+1. Open `http://localhost:5173` and click the unchanged **Registrasi Visitor** button.
+2. Submit a new test participant using a valid, unused WhatsApp number.
+3. In a third terminal, process the pending message:
 
    ```powershell
+   cd server
    php artisan notifications:process
    ```
 
-3. The command should report `Processed: 2, sent: 2, failed: 0.` No external message is sent.
+4. Expect `Processed: 1, sent: 1, failed: 0.`
+5. Read the mock output:
 
-To inspect recent status locally:
+   ```powershell
+   Get-Content .\storage\logs\whatsapp-mock.log -Tail 100
+   ```
+
+6. Confirm the log contains the normalized recipient, participant name, registration number, message body, e-ticket URL, and a successful command result.
+7. Copy the e-ticket URL into the browser. Confirm the correct e-ticket and QR Code appear with initial status `NOT CHECKED IN`.
+8. Refresh the page and confirm the URL and QR remain unchanged.
+
+Use test participant data: the mock log contains the message recipient and content.
+
+### Smartphone QR test
+
+`localhost` on a computer is not reachable as `localhost` from a phone. Put both devices on the same network, run Vite and Laravel on a LAN-accessible host, and set `PUBLIC_WEB_URL` to that accessible frontend URL before registering. Alternatively, test after HTTPS deployment. Scan the displayed QR with the normal phone camera and confirm it opens the same e-ticket URL. Safari/iPhone generally requires an HTTPS or otherwise reachable URL.
+
+## Failure and retry test
+
+Set this server value:
+
+```dotenv
+REGISTRATION_WHATSAPP_MOCK_FAILURE=true
+```
+
+Run `php artisan config:clear`, create a new registration, and process notifications. Expect `sent: 0, failed: 1`. The registration and e-ticket must still open.
+
+Restore the flag to `false`, clear configuration again, and find the failed delivery UUID:
 
 ```powershell
 php artisan tinker
-App\Models\TicketDelivery::latest()->get(['id','channel','provider','status','attempts','last_attempt_at']);
+App\Models\TicketDelivery::where('status', 'failed')->latest()->first(['id','status','attempts','last_error']);
 ```
 
-### Safe email rendering test
-
-Use Laravel's local log mail transport:
-
-```dotenv
-REGISTRATION_EMAIL_DRIVER=mail
-MAIL_MAILER=log
-REGISTRATION_WHATSAPP_DRIVER=mock
-```
-
-Run `php artisan config:clear`, register a new test participant, then run `php artisan notifications:process`. The email is written to the local Laravel log rather than sent externally. Do this only with test participant data because the log contains message content.
-
-### Failure and retry test
-
-To simulate an email outage locally:
-
-```dotenv
-REGISTRATION_EMAIL_DRIVER=mock
-REGISTRATION_EMAIL_MOCK_FAILURE=true
-```
-
-Clear configuration, create a test registration, and run the processor. Email becomes `FAILED`; WhatsApp remains independent. Restore the flag to `false`, clear configuration, obtain the failed delivery UUID, then run:
+Exit Tinker, then retry the displayed UUID:
 
 ```powershell
 php artisan notifications:retry DELIVERY_UUID
 php artisan notifications:process
 ```
 
-Use `REGISTRATION_WHATSAPP_MOCK_FAILURE=true` for the equivalent WhatsApp test.
-
-## Production processing
-
-Configure the server cron to invoke Laravel's scheduler every minute:
-
-```cron
-* * * * * cd /path/to/server && php artisan schedule:run > /dev/null 2>&1
-```
-
-The scheduler runs `notifications:process --limit=100` with overlap protection. Monitor failed delivery counts and scheduler health. Do not expose the processor or retry command as a public endpoint.
+The same record becomes `SENT`, its attempt count increases, and its existing e-ticket URL and idempotency key remain unchanged.
 
 ## Automated verification
 
 ```powershell
 cd server
+php artisan test --filter=WhatsAppDeliveryTest
 php artisan test
 vendor\bin\pint --test
 
@@ -186,12 +152,28 @@ cd ..
 npm run build
 ```
 
-Tests cover delivery creation, independent channel failure, registration durability, `SENT`/`FAILED` transitions, safe retry, duplicate prevention, shared e-ticket URL, persistent QR identity, confirmed/waitlisted content, invalid contacts, mock safety, the Laravel Mail adapter/PDF, and frontend credential exclusion.
+The feature tests cover message creation and contents, normalized recipient, URL resolution, persistent ticket/QR identity, PII-free QR payload, provider failure, registration durability, retry, idempotency, duplicate registration protection, credential exclusion, and actual mock-log output.
+
+## Production configuration
+
+No real WhatsApp vendor has been selected, so no real provider adapter or credentials have been invented. Keep production disabled:
+
+```dotenv
+REGISTRATION_WHATSAPP_DRIVER=disabled
+```
+
+After a vendor is selected, add an adapter implementing `WhatsAppProvider`, register its driver in `AppServiceProvider`, and map its credentials from server-only environment variables. The adapter should pass the existing idempotency key to a native provider idempotency field when available.
+
+Run Laravel's scheduler every minute in production so pending outbox messages are processed:
+
+```cron
+* * * * * cd /path/to/server && php artisan schedule:run > /dev/null 2>&1
+```
 
 ## Known limitations
 
-- A production WhatsApp adapter cannot be completed until the provider, approved template, endpoint, and credential format are selected.
-- The current system records provider acceptance as `SENT`; delivery/read webhooks are not implemented. `delivered_at` remains available for a future webhook phase.
-- SMTP has an unavoidable crash window after a remote server accepts a message but before the local database records `SENT`. API providers with native idempotency keys are preferable when strict duplicate suppression is required.
-- Manual resend UI and authenticated resend audit are deferred to the admin/panitia dashboard phase. The server-side retry service and CLI command are ready for that integration.
-- Existing registrations are not automatically enqueued during migration, preventing accidental bulk messages on deployment. Phase 3 notifications are created for new registrations.
+- Mock mode proves message composition and delivery state only; it does not send a real WhatsApp message.
+- A production adapter cannot be completed until the provider, approved message/template, endpoint, and credential format are selected.
+- `SENT` currently means the provider adapter accepted the request. Delivery/read webhooks are not implemented.
+- Manual resend UI and its staff audit trail are deferred to the authenticated admin/panitia phase. The protected server-side retry service and CLI command are ready for later integration.
+- Existing registrations are not bulk-enqueued by the migration, preventing accidental messages during deployment. New registrations receive the Phase 3 delivery record.

@@ -17,7 +17,7 @@ Event website and registration system for ProBuild INTIM 2026. The existing Reac
 - Manual, audited waitlist promotion domain service.
 - Four event days under one registration, with a unique daily check-in constraint.
 - Talkshow attendance kept separate from daily event check-in, including an audited Super Admin override.
-- Provider-neutral email and WhatsApp contracts. Actual delivery is intentionally deferred to Phase 3.
+- Participant notification delivery is intentionally deferred to Phase 3.
 - RBAC/event-assignment schema. Login and dashboards are intentionally deferred to Phase 4.
 
 No public QR recovery endpoint is present, and the registration API never returns the QR token.
@@ -37,12 +37,11 @@ See [`docs/PHASE-2.md`](docs/PHASE-2.md) for routes, security details, and manua
 
 ## Phase 3 capabilities
 
-- Separate email and WhatsApp confirmation deliveries created transactionally after registration.
-- Provider-neutral contracts with safe mock providers and a Laravel Mail adapter.
-- Branded HTML/plain-text email, **VIEW E-TICKET** link, and optional existing PDF attachment.
-- WhatsApp-ready confirmation text using the same persistent e-ticket URL.
-- Deduplicated outbox processing, bounded retry, safe delivery errors, and channel-level status tracking.
-- Production mock protection so local/test drivers cannot accidentally transmit real messages.
+- One WhatsApp confirmation delivery created reliably after registration; email delivery is outside Phase 3 scope.
+- A provider-neutral WhatsApp contract and safe local mock provider.
+- Concise Indonesian confirmation using the same persistent e-ticket URL and QR identity.
+- Deduplicated outbox processing, bounded retry, safe delivery errors, and delivery status tracking.
+- Production mock protection so local/test mode cannot transmit real messages.
 
 See [`docs/PHASE-3.md`](docs/PHASE-3.md) for configuration, processing, retry, and provider integration details.
 
